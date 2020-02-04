@@ -65,23 +65,59 @@ module.exports={
         })
     },
 
+    // get cart user
+    getCartUser: (id_users) =>{
+
+        return new Promise((resolve, reject)=> {
+            connection.query("SELECT invoice.code AS 'invoice', product.name AS 'product', product.price AS 'price', order_detail.qty, order_detail.total_price FROM order_detail INNER JOIN invoice ON order_detail.id_code= invoice.id INNER JOIN product ON order_detail.id_product=product.id WHERE status_checkout=0 AND id_users =?", id_users, (err, result)=>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error(err));
+                }
+            })
+        })
+    },
+
+
+
+
+
     // ADD product to chart
-    check_invoice_code: (id_users, data) =>{
+    addCartUser: (id_users, data) =>{
         let code = 0;
-        const id = parseInt(data.id)
+        let stock = 0;
+        let price = 0;
+        let total_price = 0;
+        let qty = parseInt(data.qty);
+
         return new Promise((resolve, reject)=> {
             connection.query("SELECT * FROM invoice WHERE status_checkout=0 AND id_users =?", id_users, (err, result)=>{
                 result.forEach(e => {
                     code=e.id;
                 });
                 console.log(code)
-                connection.query("SELECT * FROM product WHERE ")
             
-                if(!err $$ ){
-                    console.log(code)
-
-                    //ADD
-                    connection.query("INSERT INTO order_detail SET ?, id_kode_transaksi = ? ", [data, code])
+                if(!err){
+                    connection.query("SELECT * FROM product WHERE id=?", data.id_product, (err, hasil)=>{
+                        hasil.forEach(f=>{
+                        stock = f.stock;
+                        price = f.price;
+                        console.log(stock)
+                        })
+                    total_price = price * qty;
+                    stock_final = stock - qty;
+                    console.log(total_price)
+                        if(stock >= qty){
+                            connection.query("INSERT INTO order_detail SET ?, total_price= ?, id_code = ?", [data, total_price, code])
+                            connection.query("UPDATE product SET stock = ? WHERE id = ?", [stock_final, data.id_product])
+                        }else{
+                            console.log('Stok Tidak Cukup')
+                        }
+                    })
+                    resolve(result);
+                    // //ADD
+                    // connection.query("INSERT INTO order_detail SET ?, id_kode_transaksi = ? ", [data, code])
 
                 }else{
                     reject(new Error(err));

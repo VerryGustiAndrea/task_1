@@ -13,9 +13,18 @@ Router
 .post('/insert', CartController.insertCart)
 
 
+.get('/cartuser/:id_users', CartController.getCartUser)
+
+
+
+
+
+
 //KODE TRANSAKSI
 .post('/generate/:id_users', CartController.getCode)
-.get('/check/:id_users', CartController.Add)
+
+//add
+.post('/check/:id_users', CartController.Add)
 
 
 module.exports = Router;

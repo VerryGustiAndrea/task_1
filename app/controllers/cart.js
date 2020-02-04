@@ -56,18 +56,33 @@ module.exports = {
         .catch(err=>console.log(err))
     },
 
-    //ADD  PRODUCT DATA TO CART
-    Add: (req, res)=>{
-        
+
+
+    // GET CART USERS
+    getCartUser: (req, res)=>{
         const id_users = req.params.id_users
+
+        cartModel.getCartUser(id_users)
+        .then((result)=>{
+            res.json(result)
+            // console.log(result);
+        })
+        .catch(err=>console.log(err))
+    },
+
+
+    //ADD  PRODUCT DATA TO CART USERS
+    Add: (req, res)=>{
+        let id_user = req.params.id_users
         let data={
+            
             id_product : req.body.id_product,
             qty : req.body.qty
         }
-        cartModel.check_invoice_code(id_users, data)
-        .then((hasil)=>{
-            res.json(hasil)
-            console.log(hasil);
+        cartModel.addCartUser(id_user, data)
+        .then((result)=>{
+            res.json(result)
+            console.log(result);
         })
         .catch(
             err=>console.log(err)
