@@ -7,24 +7,29 @@ const auth = require('../../helpers/auth')
 
 
 Router
-.get('/getall', CartController.getCart)
-.get('/checkout', CartController.getCheckout)
-.get('/history', CartController.getHistory)
-.post('/insert', CartController.insertCart)
-
-
-.get('/cartuser/:id_users', CartController.getCartUser)
-
-
-
-
-
 
 //KODE TRANSAKSI
 .post('/generate/:id_users', CartController.getCode)
 
+
 //add
-.post('/check/:id_users', CartController.Add)
+.post('/add/:id_users', CartController.Add)
+
+//reduce
+.post('/reduce/:id_users', CartController.Reduce)
+
+
+// View Cart User
+.get('/cartuser/:id_users', CartController.getCartUser)
+
+// Checkout User
+.post('/checkout/:id_users', CartController.getCheckout)
+
+// View Order User
+.get('/vieworder/:id_users', CartController.getViewOrder)
+
+
+
 
 
 module.exports = Router;
