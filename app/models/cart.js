@@ -79,10 +79,6 @@ module.exports={
         })
     },
 
-
-
-
-
     // ADD product to chart
     addCartUser: (id_users, data) =>{
         let code = 0;
