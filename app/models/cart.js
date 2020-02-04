@@ -55,12 +55,23 @@ module.exports={
         // KODE TRANSAKSI
     getCode: (id_users) =>{
         return new Promise((resolve, reject)=> {
-            connection.query("INSERT INTO invoice SET code=LPAD(FLOOR(RAND() * 9999999999.99), 10, '0'),status_checkout = 0, id_users=?", id_users, (err, result)=>{
-                if(!err){
-                    resolve(result);
+            connection.query("SELECT * from invoice WHERE status_checkout = 0 AND id_users=?", id_users, (err, hasil)=>{
+                console.log(hasil)
+
+                if(hasil.length === 0){
+                    console.log('Berhasil Mendapatkan Kode Invoice, Selamat Berbelanja')
+                    connection.query("INSERT INTO invoice SET code=LPAD(FLOOR(RAND() * 9999999999.99), 10, '0'),status_checkout = 0, id_users=?", id_users, (err, result)=>{
+                        if(!err){
+                            resolve(result);
+                        }else{
+                            reject(new Error(err));
+                        }
+                    })
+
                 }else{
+                    console.log('Kode Invoice Sebelumnya Masih Ada!')
                     reject(new Error(err));
-                }
+                }  
             })
         })
     },
