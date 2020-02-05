@@ -89,7 +89,6 @@ module.exports={
                 qty : 0,
                 total_price:0,
 
-
             }
             connection.query("SELECT invoice.code AS 'invoice', product.name AS 'product', product.price AS 'price',category.name AS 'category', order_detail.qty, order_detail.total_price FROM order_detail INNER JOIN invoice ON order_detail.id_code= invoice.id INNER JOIN product ON order_detail.id_product=product.id INNER JOIN category ON product.id_category=category.id WHERE status_checkout=0 AND id_users = ?",id_users, (err, result)=>{
                 result.forEach(e =>{
@@ -118,12 +117,31 @@ module.exports={
     // GET VIEW ORDER
     getViewOrder: (id_users) =>{
         return new Promise((resolve, reject)=> {
-            connection.query("SELECT cart.* FROM cart INNER JOIN invoice ON cart.invoice=invoice.code WHERE status_checkout = 1 AND status_pembayaran = 0 AND cart.id_users = ?", id_users, (err, result)=>{
-                if(!err){
-                    resolve(result);
-                }else{
-                    reject(new Error(err));
-                }
+
+            connection.query("SELECT users.name, cart.* FROM cart INNER JOIN invoice ON cart.invoice=invoice.code INNER JOIN users ON invoice.id_users=users.id WHERE status_checkout = 1 AND status_pembayaran = 0 AND cart.id_users = ?", id_users, (err, result)=>{
+                let name = ''
+                let invoice = 0
+                let total_price_order = 0
+                result.forEach(e=>{
+                    name = e.name
+                    invoice = e.invoice
+                    total_price_order += e.total_price
+                })
+                connection.query("SELECT cart.product, cart.category, cart.price, cart.qty, cart.total_price, cart.date FROM cart INNER JOIN invoice ON cart.invoice=invoice.code INNER JOIN users ON invoice.id_users=users.id WHERE status_checkout = 1 AND status_pembayaran = 0 AND cart.id_users = ?", id_users, (err, hasil)=>{
+                    let data = {
+                        name : name,
+                        invoice : invoice,
+                        total_price_order : total_price_order,
+                        order_detail : hasil
+                        }
+                    
+                    if(!err){
+
+                        resolve(data);
+                    }else{
+                        reject(new Error(err));
+                    }
+                })
             })
         })
     },
