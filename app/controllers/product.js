@@ -51,8 +51,7 @@ module.exports = {
             images : `http://localhost:4000/uploads/${req.file.filename}`,
             price : req.body.price,
             stock : req.body.stock,
-            updated_at : new Date(),
-            created_at : new Date()            
+            updated_at : new Date()          
         }
         
         productModel.updateProduct(data, id_product)
@@ -65,6 +64,39 @@ module.exports = {
     deleteProduct: (req, res)=>{
         const id_product = req.params.id_product;
         productModel.deleteProduct(id_product)
+            .then((result)=>{
+                res.json(result)
+            })
+            .catch(err=>console.log(err));
+    },
+
+    searchProduct: (req, res)=>{
+        const name = '%'+req.params.name+'%';
+        productModel.searchProduct(name)
+            .then((result)=>{
+                res.json(result)
+            })
+            .catch(err=>console.log(err));
+    },
+
+    sortProductName: (req, res)=>{
+        productModel.sortProductName()
+            .then((result)=>{
+                res.json(result)
+            })
+            .catch(err=>console.log(err));
+    },
+
+    sortProductCategory: (req, res)=>{
+        productModel.sortProductName()
+            .then((result)=>{
+                res.json(result)
+            })
+            .catch(err=>console.log(err));
+    },
+
+    sortProductUpdate: (req, res)=>{
+        productModel.sortProductUpdate()
             .then((result)=>{
                 res.json(result)
             })

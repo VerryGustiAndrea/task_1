@@ -62,5 +62,60 @@ module.exports={
                 }
             })
         })
-    }
+    },
+
+    //SEARCH PRODUK BY NAME
+    searchProduct: (name) => {  
+        return new Promise((resolve, reject)=>{
+            connection.query("SELECT product.*, category.name as 'category' FROM product INNER JOIN category ON product.id_category = category.id WHERE product.name LIKE ?", name, (err,result)=>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error(err));
+                }
+            })
+        })
+    },
+
+    //SORT PRODUK BY NAME
+    sortProductName: () => {  
+        return new Promise((resolve, reject)=>{
+            connection.query("SELECT product.*, category.name as 'category' FROM product INNER JOIN category ON product.id_category = category.id ORDER BY product.name ASC", (err,result)=>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error(err));
+                }
+            })
+        })
+    },
+
+    //SORT PRODUCT BY CATEGORY
+    sortProductCategory: () => {  
+        return new Promise((resolve, reject)=>{
+            connection.query("SELECT product.*, category.name as 'category' FROM product INNER JOIN category ON product.id_category = category.id ORDER BY category.name ASC", (err,result)=>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error(err));
+                }
+            })
+        })
+    },
+
+    //SORT PRODUCT BY DATE UPDATE ( TERBARU DAHULU)
+    sortProductUpdate: () => {  
+        return new Promise((resolve, reject)=>{
+            connection.query("SELECT product.*, category.name as 'category' FROM product INNER JOIN category ON product.id_category = category.id ORDER BY product.updated_at DESC", (err,result)=>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error(err));
+                }
+            })
+        })
+    }    
+
+
+
 }

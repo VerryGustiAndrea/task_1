@@ -28,5 +28,19 @@ Router
 .patch('/update/:id_product', upload.single('images'), ProductController.updateProduct)
 
 
+//SEARCH
+.get('/search/:name', ProductController.searchProduct)
+
+//SORT PRODUCT BY NAME
+.get('/sortbyname', ProductController.sortProductName)
+
+//SORT PRODUCT BY CATEGORY
+.get('/sortbycategory', ProductController.sortProductCategory)
+
+//SORT PRODUCT BY UPDATE
+.get('/sortbyupdate', ProductController.sortProductUpdate)
+
+
+
 
 module.exports = Router;
