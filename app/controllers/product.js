@@ -103,6 +103,15 @@ module.exports = {
             .catch(err=>console.log(err));
     },
 
+    //PAGINATION
+    pagination: (req, res)=>{
+        productModel.pagination()
+        .then((result)=>{
+            res.json(result)
+        })
+        .catch(err=>console.log(err))
+    },
+
     loginUser: (req, res)=>{
         var token = jwt.sign({ id: 1, name: 'verry' }, process.env.PRIVATE_KEY);
         res.json({

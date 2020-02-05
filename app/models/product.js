@@ -114,7 +114,20 @@ module.exports={
                 }
             })
         })
-    }    
+    },
+    
+    //PAGINATION 5
+    pagination: () => {  
+        return new Promise((resolve, reject)=>{
+            connection.query("SELECT product.*, category.name as 'category' FROM product INNER JOIN category ON product.id_category = category.id LIMIT 5", (err,result)=>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error(err));
+                }
+            })
+        })
+    },
 
 
 

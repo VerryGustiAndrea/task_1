@@ -1,6 +1,19 @@
 const express = require('express');
 const multer = require('multer');
 
+// var whitelist = ['http://localhost:4000/v1 ', 'http://example2.com']
+// var corsoption = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
+
+const cors = require('cors');
+
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, './uploads')
@@ -11,17 +24,13 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage})
 
-
-
 const Router = express.Router();
-
 const ProductController = require('../../controllers/product');
 const auth = require('../../helpers/auth');
 
 
-
 Router
-.get('/getall', ProductController.getAllProduct)
+.get('/getall', cors(), ProductController.getAllProduct)
 .get('/ID/:id_product', ProductController.getProductID)
 .post('/insert', upload.single('images'), ProductController.insertProduct)
 .delete('/del/:id_product', ProductController.deleteProduct)
@@ -40,6 +49,8 @@ Router
 //SORT PRODUCT BY UPDATE
 .get('/sortbyupdate', ProductController.sortProductUpdate)
 
+//PAGINATION
+.get('/pagination', ProductController.pagination)
 
 
 
