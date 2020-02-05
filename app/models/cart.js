@@ -156,8 +156,19 @@ module.exports={
                     stock_final = stock - qty;
                     console.log(total_price)
                         if(stock >= qty){
-                            connection.query("INSERT INTO order_detail SET ?, total_price= ?, id_code = ?", [data, total_price, code])
-                            connection.query("UPDATE product SET stock = ? WHERE id = ?", [stock_final, data.id_product])
+                            connection.query("SELECT * FROM order_detail WHERE id_product = ? AND id_code = ?", [data.id_product, code], (err, answer)=>{
+                                
+                            
+                            if(answer.length === 0){
+                                console.log('disini')
+                                connection.query("INSERT INTO order_detail SET ?, total_price= ?, id_code = ?", [data, total_price, code])
+                                connection.query("UPDATE product SET stock = ? WHERE id = ?", [stock_final, data.id_product])
+                            }else{
+                                console.log('ternyata disini')
+                                connection.query("UPDATE order_detail SET id_product= ?, qty= qty + ?, total_price= ?, id_code = ?", [data.id_product, data.qty, total_price, code])
+                                connection.query("UPDATE product SET stock = ? WHERE id = ?", [stock_final, data.id_product])
+                            }
+                            })
                         }else{
                             console.log('Stok Tidak Cukup')
                         }
@@ -178,10 +189,6 @@ module.exports={
     reduceCartUser: (id_users, data) =>{
         let code = 0;
         let qtyback = 0;
-        // let price = 0;
-        // let total_price = 0;
-        // let qty = parseInt(data.qty);
-
         return new Promise((resolve, reject)=> {
             connection.query("SELECT * FROM invoice WHERE status_checkout=0 AND id_users = ?", id_users, (err, result)=>{
                 result.forEach(e => {
@@ -205,14 +212,8 @@ module.exports={
                     }else{
                         console.log('Gagal Mendelete')
                     }    
-
                     })
-                    
-                    
                     resolve(result);
-                    // //ADD
-                    // connection.query("INSERT INTO order_detail SET ?, id_kode_transaksi = ? ", [data, code])
-
                 }else{
                     reject(new Error(err));
 
