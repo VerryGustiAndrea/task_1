@@ -2,8 +2,6 @@
 
 To learn about microservices
 
-[![Code Style](https://img.shields.io/badge/code%20style-standard-green.svg)](https://github.com/feross/standard)
-
 [Structure](#structure) |
 [Run](#run) |
 [License](#license)
