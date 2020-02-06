@@ -50,7 +50,7 @@ Router
 .get('/sortbyupdate', ProductController.sortProductUpdate)
 
 //PAGINATION
-.get('/pagination', ProductController.pagination)
+.get('/page/:page', ProductController.pagination)
 
 
 

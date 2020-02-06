@@ -105,7 +105,8 @@ module.exports = {
 
     //PAGINATION
     pagination: (req, res)=>{
-        productModel.pagination()
+        page = req.params.page
+        productModel.pagination(page)
         .then((result)=>{
             res.json(result)
         })
