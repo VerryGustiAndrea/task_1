@@ -1,4 +1,4 @@
-# Simple Express API E-Comerce
+# Simple Express API E-Commerce
 
 To learn about microservices
 
@@ -11,7 +11,7 @@ To learn about microservices
 We use very simple structure to get started with
 
 ```
-|-- express-api-gateway
+|-- express-api-ecommerce
   |-- task_1
     |-- app
       |-- config
