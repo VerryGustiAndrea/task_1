@@ -28,6 +28,11 @@ Router
 // View Order User
 .get('/vieworder/:id_users', CartController.getViewOrder)
 
+// View History Order User
+.get('/history/:id_users', CartController.getHistory)
+
+
+
 
 
 

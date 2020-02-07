@@ -48,10 +48,30 @@ module.exports = {
         cartModel.getViewOrder(id_users)
         .then((result)=>{
             res.json(result)
-            console.log(result);
+        })
+        .catch(err=>res.json(' tidak ada order'))
+    },
+
+    //GET HISTORY ORDER
+    getHistory: (req, res)=>{
+        const id_users = req.params.id_users
+        cartModel.getHistory(id_users)
+        .then((result)=>{
+            res.json(result)
+        })
+        .catch(err=>res.json(' Anda Tidak Memiliki History Order'))
+    },
+
+    //ACC PAYMENT USER
+    accPayment: (req, res)=>{
+        const id_users = req.params.id_users
+        cartModel.accPayment(id_users)
+        .then((result)=>{
+            res.json('Pembayaran berhasil untuk user_id :'+id_users)
         })
         .catch(err=>console.log(err))
-    },
+    },    
+    
 
 
 
