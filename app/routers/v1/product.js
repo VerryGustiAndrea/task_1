@@ -30,7 +30,7 @@ const auth = require('../../helpers/auth');
 
 
 Router
-.get('/getall', cors(), ProductController.getAllProduct)
+.get('/getall', ProductController.getAllProduct)
 .get('/ID/:id_product', ProductController.getProductID)
 .post('/insert', upload.single('images'), ProductController.insertProduct)
 .delete('/del/:id_product', ProductController.deleteProduct)

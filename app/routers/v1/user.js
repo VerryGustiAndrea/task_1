@@ -1,12 +1,14 @@
 const express = require('express');
 const Router = express.Router();
 
-const ProductController = require('../../controllers/product');
+const LoginController = require('../../controllers/login');
 const auth = require('../../helpers/auth')
 
 
 
 Router
-.post('/login', ProductController.loginUser)
+// .post('/login', ProductController.loginUser)
+
+.post('/loginuser', LoginController.checkUser)
 
 module.exports = Router;

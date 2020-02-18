@@ -21,7 +21,7 @@ const auth = require('../../helpers/auth')
 
 
 Router
-.get('/',auth.verify, ProductController.getProduct)
+.get('/', ProductController.getProduct)
 .get('/detail/:id_product', ProductController.getProductID)
 .get('/getdetail/:id_product', ProductController.getProductDetail)
 .post('/insert',upload.single('images'), ProductController.insertProduct)

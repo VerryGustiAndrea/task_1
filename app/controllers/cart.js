@@ -54,18 +54,31 @@ module.exports = {
 
     //GET HISTORY ORDER
     getHistory: (req, res)=>{
-        const id_users = req.params.id_users
-        cartModel.getHistory(id_users)
+        cartModel.getHistoryTabel()
         .then((result)=>{
             res.json(result)
         })
         .catch(err=>res.json(' Anda Tidak Memiliki History Order'))
     },
 
+    // GET ORDER DETAIL ALL
+    getDetailOrder: (req, res)=>{
+
+        const code = req.params.code
+        cartModel.getDetailOrder(code)
+        .then((result)=>{
+            res.json(result)
+            // console.log(result);
+        })
+        .catch(err=>console.log(err))
+    },
+
+
     //ACC PAYMENT USER
     accPayment: (req, res)=>{
         const id_users = req.params.id_users
-        cartModel.accPayment(id_users)
+        const code = req.params.code
+        cartModel.accPayment(id_users, code)
         .then((result)=>{
             res.json('Pembayaran berhasil untuk user_id :'+id_users)
         })

@@ -29,8 +29,15 @@ Router
 .get('/vieworder/:id_users', CartController.getViewOrder)
 
 // View History Order User
-.get('/history/:id_users', CartController.getHistory)
+.get('/history', CartController.getHistory)
 
+//View Order Detail
+.get('/orderdetail/:code', CartController.getDetailOrder)
+
+
+
+// Checkout User
+.post('/acc/:id_users&:code', CartController.accPayment)
 
 
 
