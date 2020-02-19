@@ -109,17 +109,23 @@ module.exports={
     // CHECKOUT USER
     getCheckout: (id_users) =>{
         return new Promise((resolve, reject)=> {
-            let data = {
-                id_users : id_users,
-                invoice : 0,
-                total_price:0,
 
-            }
+            // let id_users = id_users;
+            let invoice = 0;
+            let total_price_item = 0;
+            
             connection.query("SELECT invoice.code AS 'invoice', product.name AS 'product', product.price AS 'price',category.name AS 'category', order_detail.qty, order_detail.total_price FROM order_detail INNER JOIN invoice ON order_detail.id_code= invoice.id INNER JOIN product ON order_detail.id_product=product.id INNER JOIN category ON product.id_category=category.id WHERE status_checkout=0 AND id_users = ?",id_users, (err, result)=>{
                 result.forEach(e =>{
-                    data.invoice =  e.invoice;
-                    data.total_price += e.total_price;
+                    invoice =  e.invoice;
+                    total_price_item += e.total_price;
+                    
                     })    
+                    let data = {
+                        id_users : id_users,
+                        invoice : invoice,
+                        total_price : total_price_item/10 + total_price_item,
+                    }
+                    console.log(data)
                     connection.query("INSERT INTO cart SET ?",data)            
                 if(!err){                    
                     console.log('berhasil menambahkan data ke cart')
@@ -321,7 +327,39 @@ module.exports={
                     // connection.query("INSERT INTO order_detail SET ?, id_kode_transaksi = ? ", [data, code])
 
                 }else{
-                    resolve({msg :'silakan ambil kode invoice'});
+                    // resolve({msg :'silakan ambil kode invoice'});
+                            connection.query("INSERT INTO invoice SET code=LPAD(FLOOR(RAND() * 9999999999.99), 10, '0'),status_checkout = 0,status_pembayaran = 0, id_users=?", id_users, (err, result)=>{
+                                connection.query("SELECT * FROM invoice WHERE status_checkout=0 AND id_users = ?", id_users, (err, result)=>{
+                                    result.forEach(e => {
+                                        code=e.id;
+                                    });
+                                    console.log('codenya',code)
+                                connection.query("SELECT * FROM product WHERE id=?", data.id_product, (err, hasil)=>{
+                                    hasil.forEach(f=>{
+                                    stock = f.stock;
+                                    price = f.price;
+                                    console.log(stock)
+                                    })
+                                total_price = price;
+                                stock_final = stock - qty;
+                                console.log(total_price)
+                                    if(!err && stock >= qty){
+                                        connection.query("SELECT * FROM order_detail WHERE id_product = ? AND id_code = ?", [data.id_product, code], (err, answer)=>{
+                                            console.log(answer)
+                                        
+                                        if(answer.length === 0){
+                                            console.log('disini')
+                                            connection.query("INSERT INTO order_detail SET ?, total_price= ?, id_code = ?", [data, total_price, code])
+                                            connection.query("UPDATE product SET stock = ? WHERE id = ?", [stock_final, data.id_product])
+                                            }
+                                        })
+                                    }else{
+                                        console.log('Stok Tidak Cukup')
+                                    }
+                                resolve(result);
+                            })
+                        })
+                    })
 
                 }
             })
