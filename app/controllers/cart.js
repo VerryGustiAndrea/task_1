@@ -132,6 +132,15 @@ module.exports = {
         res.json({
             token:token
         })
-    }
+    },
+
+    getTodayIncome: (req, res)=>{
+        cartModel.getTodayIncome()
+        .then((result)=>{
+            res.json(result)
+            console.log(result);
+        })
+        .catch(err=>console.log(err))
+    },
 
 }

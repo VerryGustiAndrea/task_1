@@ -40,6 +40,11 @@ Router
 .post('/acc/:id_users&:code', CartController.accPayment)
 
 
+//Get today Income
+.get('/income', CartController.getTodayIncome)
+
+
+
 
 
 

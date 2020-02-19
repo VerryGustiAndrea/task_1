@@ -419,5 +419,76 @@ module.exports={
             })
             })
         })
-    }
+    },
+
+    getTodayIncome: () =>{
+        return new Promise((resolve, reject)=> {
+            let total_income_today = 0;
+            let total_income_yesterday = 0;
+            let selisih_income = 0;
+            let total_order_week = 0;
+            let total_order_last_week = 0;
+            let selisih_order = 0;
+            let total_price_year = 0;
+            let total_price_lastyear = 0;
+            let selisih_year = 0;
+
+            connection.query("SELECT * FROM `cart` where DATE(date)= CURDATE()", (err, result)=>{
+                result.forEach(e=>{
+                    total_income_today += e.total_price
+                })
+                connection.query("SELECT * FROM `cart` where DATE(date) = DATE(NOW() - INTERVAL 1 DAY)", (err, result)=>{
+                    result.forEach(f=>{
+                        total_income_yesterday += f.total_price
+                    })
+                    selisih_income = total_income_today - total_income_yesterday;
+
+                    connection.query("SELECT COUNT(total_price) AS total_order FROM `cart` WHERE date between date_sub(now(),INTERVAL 1 WEEK) and now()" ,(err, result)=>{
+                        result.forEach(g=>{
+                            total_order_week = g.total_order
+                        })
+                        connection.query("SELECT COUNT(total_price) AS total_order FROM `cart` WHERE date between date_sub(now(),INTERVAL 2 WEEK) and date_sub(now(),INTERVAL 1 WEEK)", (err, result)=>{
+                            result.forEach(h=>{
+                                total_order_last_week = h.total_order
+                            })
+                            selisih_order = total_order_week - total_order_last_week
+                            connection.query("SELECT * FROM `cart` WHERE date between date_sub(now(),INTERVAL 1 YEAR) and now()", (err, result) =>{
+                                result.forEach(i=>{
+                                    total_price_year += i.total_price
+                                })
+                                connection.query("SELECT * FROM `cart` WHERE date between date_sub(now(),INTERVAL 2 YEAR) and date_sub(now(),INTERVAL 1 YEAR)", (err, result)=>{
+                                    result.forEach(j=>{
+                                        total_price_lastyear += j.total_price
+                                    })
+                                    selisih_year = total_price_year - total_price_lastyear
+                                    if(!err){
+                                        let data = {
+                                            total_today : total_income_today,
+                                            total_yesterday : total_income_yesterday,
+                                            persen :  selisih_income / total_income_yesterday  *100,
+                                            total_order_thisweek : total_order_week,
+                                            total_order_last_week : total_order_last_week,
+                                            persen_order : selisih_order / total_order_last_week *100,
+                                            total_income_year : total_price_year,
+                                            total_income_lastyear : total_price_lastyear,
+                                            persen_year : selisih_year / 1 * 100
+        
+                                        }
+                                        resolve(data);
+                                    }else{
+                                        reject(new Error(err));
+                                    }
+                                })
+                            })                            
+                        })
+                    })
+                  
+                })                                              
+           })
+        })
+    
+    },
+
+
+
 }

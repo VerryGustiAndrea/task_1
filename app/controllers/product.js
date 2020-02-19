@@ -1,11 +1,14 @@
 const productModel = require('../models/product')
 var jwt = require('jsonwebtoken');
+// const miscHelper = require('../../app/helpers/helpers')
+
 
 
 module.exports = {
     getAllProduct: (req, res)=>{
         productModel.getAllProduct()
         .then((result)=>{
+
             res.json(result)
         })
         .catch(err=>console.log(err))
