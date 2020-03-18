@@ -9,7 +9,7 @@ module.exports={
                 username : '',
                 id :0
             }
-
+            console.log(email)
             connection.query("SELECT * FROM users WHERE email= ?",email, (err, result)=>{
                 result.forEach(e=>{
                     data.passwordsql = e.password
@@ -17,7 +17,7 @@ module.exports={
                     data.id = e.id
                     
                 })
-                console.log(data.id)
+               
                 if(!err && result.length > 0){
                     resolve(data);
                 }else{

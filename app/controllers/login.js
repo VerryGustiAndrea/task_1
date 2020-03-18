@@ -17,7 +17,7 @@ module.exports = {
     checkUser: (req, res)=>{
         email = req.body.email;
         password = req.body.password;
-        
+        console.log(email)
         productModel.checkUser(email, password)
         .then((data)=>{
  
